@@ -1,6 +1,6 @@
 Name:           rdesktop
 Version:        1.6.0
-Release:        8%{?dist}
+Release:        8%{?dist}.1
 Summary:        X client for remote desktop into Windows Terminal Server
 
 Group:          User Interface/Desktops
@@ -10,6 +10,7 @@ Source0:        %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  openssl-devel, libX11-devel, pcsc-lite-devel, libao-devel
 Requires:	pcsc-lite, libao-devel
+Patch0:		remote-file-access.patch
 
 %description
 rdesktop is an open source client for Windows NT Terminal Server and
@@ -19,6 +20,7 @@ desktop. Unlike Citrix ICA, no server extensions are required.
 
 %prep
 %setup -q
+%patch0 -p0 -b .remote-file-access
 
 %build
 %configure --with-ipv6 --with-sound=libao --enable-smartcard
@@ -39,6 +41,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/*
 
 %changelog
+* Mon May 9 2011 Soren Sandmann <ssp@redhat.com> - 1.6.0-8.1
+- Prevent remote file access (#676252)
+
 * Wed Jun 30 2010 Soren Sandmann <ssp@redhat.com> - 1.6.0-8
 - Compile with --with-sound=libao
   Related: #607710
